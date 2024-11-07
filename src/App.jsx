@@ -67,20 +67,16 @@ const workouts = [
 ];
 
 function WorkoutComponent() {
-  const [workout, setWorkout] = useState({ num: 0, name: "", image: "" });
+  const [workoutIndex, setWorkoutIndex] = useState(null);
   const { t } = useTranslate();
 
   // Function to generate a random workout
   const generateWorkout = () => {
     const randomNum = Math.floor(Math.random() * workouts.length);
-    const selectedWorkout = workouts[randomNum];
-
-    setWorkout({
-      num: randomNum + 1,
-      name: t(selectedWorkout.name, selectedWorkout.description),
-      image: selectedWorkout.image,
-    });
+    setWorkoutIndex(randomNum);
   };
+
+  const selectedWorkout = workoutIndex !== null ? workouts[workoutIndex] : null;
 
   return (
     <div className="app-container">
@@ -100,21 +96,21 @@ function WorkoutComponent() {
         <h3 className="subtitle">
           <T>Click Here to know</T>
         </h3>
-        {workout.num !== 0 && (
-          <div className="result">
-            <T>You Got a </T>
-            <span className="number">{workout.num}</span>
-          </div>
-        )}
-        {workout.num !== 0 && (
+        {selectedWorkout && (
           <>
+            <div className="result">
+              <T>You Got a </T>
+              <span className="number">{workoutIndex + 1}</span>
+            </div>
             <div className="workout">
               <T>The Workout is</T>
-              <span className="workout-name">{workout.name}</span>
+              <span className="workout-name">
+                {t(selectedWorkout.description)}
+              </span>
             </div>
             <div className="workout-image-container">
               <img
-                src={workout.image}
+                src={selectedWorkout.image}
                 alt="workout"
                 className="workout-image"
               />
